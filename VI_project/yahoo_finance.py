@@ -1,0 +1,68 @@
+import time
+import datetime
+import pandas as pd
+
+company = ["2S.BK","3K-BAT.BK","7UP.BK","A.BK","A5.BK","AAV.BK","ABICO.BK","ABM.BK","ACAP.BK","ACC.BK","ACE.BK","ACG.BK","ADB.BK","ADVANC.BK",
+           "AEC.BK","AEONTS.BK","AF.BK","AFC.BK","AGE.BK","AH.BK","AHC.BK","AI.BK","AIE.BK","AIRA.BK","AIT.BK","AJ.BK","AJA.BK","AKP.BK","AKR.BK",
+           "ALL.BK","ALLA.BK","ALT.BK","ALUCON.BK","AMA.BK","AMANAH.BK","AMARIN.BK","AMATA.BK","AMATAV.BK","AMC.BK","ANAN.BK","AOT.BK","AP.BK",
+           "APCO.BK","APCS.BK","APEX.BK","APP.BK","APURE.BK","AQ.BK","AQUA.BK","ARIN.BK","ARIP.BK","ARROW.BK","AS.BK","ASAP.BK","ASEFA.BK",
+           "ASIA.BK","ASIAN.BK","ASIMAR.BK","ASK.BK","ASN.BK","ASP.BK","ATP30.BK","AU.BK","AUCT.BK","AWC.BK","AYUD.BK","B.BK","B52.BK","BA.BK",
+           "BAFS.BK","BAM.BK","BANPU.BK","BAY.BK","BBL.BK","BC.BK","BCH.BK","BCP.BK","BCPG.BK","BCT.BK","BDMS.BK","BEAUTY.BK","BEC.BK","BEM.BK",
+           "BFIT.BK","BGC.BK","BGRIM.BK","BGT.BK","BH.BK","BIG.BK","BIZ.BK","BJC.BK","BJCHI.BK","BKD.BK","BKI.BK","BLA.BK","BLAND.BK","BLISS.BK",
+           "BM.BK","BOL.BK","BPP.BK","BR.BK","BROCK.BK","BROOK.BK","BRR.BK","BSBM.BK","BSM.BK","BTNC.BK","BTS.BK","BTW.BK","BUI.BK","BWG.BK",
+           "CAZ.BK","CBG.BK","CCET.BK","CCP.BK","CEN.BK","CENTEL.BK","CFRESH.BK","CGD.BK","CGH.BK","CHARAN.BK","CHAYO.BK","CHEWA.BK","CHG.BK",
+           "CHO.BK","CHOTI.BK","CHOW.BK","CI.BK","CIG.BK","CIMBT.BK","CITY.BK","CK.BK","CKP.BK","CM.BK","CMAN.BK","CMC.BK","CMO.BK","CMR.BK",
+           "CNT.BK","COLOR.BK","COMAN.BK","COTTO.BK","CPALL.BK","CPF.BK","CPH.BK","CPI.BK","CPL.BK","CPN.BK","CPR.BK","CPT.BK","CPW.BK",
+           "CRANE.BK","CRC.BK","CRD.BK","CSC.BK","CSP.BK","CSR.BK","CSS.BK","CTW.BK","CWT.BK","D.BK","DCC.BK","DCON.BK","DDD.BK","DELTA.BK",
+           "DEMCO.BK","DHOUSE.BK","DIMET.BK","DOD.BK","DOHOME.BK","DRT.BK","DTAC.BK","DTC.BK","DTCI.BK","DV8.BK","EA.BK","EASON.BK","EASTW.BK",
+           "ECF.BK","ECL.BK","EE.BK","EFORL.BK","EGCO.BK","EKH.BK","EMC.BK","EP.BK","EPG.BK","ERW.BK","ESSO.BK","ESTAR.BK","ETC.BK","ETE.BK",
+           "EVER.BK","F&D.BK","FANCY.BK","FE.BK","FLOYD.BK","FMT.BK","FN.BK","FNS.BK","FORTH.BK","FPI.BK","FPT.BK","FSMART.BK","FSS.BK","FTE.BK",
+           "FVC.BK","GBX.BK","GC.BK","GCAP.BK","GEL.BK","GENCO.BK","GFPT.BK","GGC.BK","GIFT.BK","GJS.BK","GL.BK","GLAND.BK","GLOBAL.BK",
+           "GLOCON.BK","GPI.BK","GPSC.BK","GRAMMY.BK","GRAND.BK","GREEN.BK","GSC.BK","GSTEEL.BK","GTB.BK","GULF.BK","GUNKUL.BK","GYT.BK",
+           "HANA.BK","HARN.BK","HFT.BK","HMPRO.BK","HPT.BK","HTC.BK","HTECH.BK","HUMAN.BK","HYDRO.BK","ICC.BK","ICHI.BK","ICN.BK","IFS.BK",
+           "IHL.BK","IIG.BK","III.BK","ILINK.BK","ILM.BK","IMH.BK","IND.BK","INET.BK","INGRS.BK","INOX.BK","INSET.BK","INSURE.BK",
+           "INTUCH.BK","IP.BK","IRC.BK","IRCP.BK","IRPC.BK","IT.BK","ITD.BK","ITEL.BK","IVL.BK","J.BK","JAK.BK","JAS.BK","JCK.BK","JCKH.BK",
+           "JCT.BK","JKN.BK","JMART.BK","JMT.BK","JR.BK","JSP.BK","JTS.BK","JUBILE.BK","JUTHA.BK","JWD.BK","K.BK","KAMART.BK","KASET.BK",
+           "KBANK.BK","KBS.BK","KC.BK","KCAR.BK","KCE.BK","KCM.BK","KDH.BK","KEX.BK","KGI.BK","KIAT.BK","KISS.BK","KK.BK","KKC.BK","KKP.BK",
+           "KOOL.BK","KSL.BK","KTB.BK","KTC.BK","KTIS.BK","KUMWEL.BK","KUN.BK","KWC.BK","KWG.BK","KWM.BK","KYE.BK","L&E.BK","LALIN.BK","LANNA.BK",
+           "LDC.BK","LEE.BK","LEO.BK","LH.BK","LHFG.BK","LHK.BK","LIT.BK","LOXLEY.BK","LPH.BK","LPN.BK","LRH.BK","LST.BK","M.BK","M-CHAI.BK",
+           "MACO.BK","MAJOR.BK","MAKRO.BK","MALEE.BK","MANRIN.BK","MATCH.BK","MATI.BK","MAX.BK","MBAX.BK","MBK.BK","MBKET.BK","MC.BK","MCOT.BK",
+           "MCS.BK","MDX.BK","MEGA.BK","META.BK","METCO.BK","MFC.BK","MFEC.BK","MGT.BK","MICRO.BK","MIDA.BK","MILL.BK","MINT.BK","MITSIB.BK",
+           "MJD.BK","MK.BK","ML.BK","MM.BK","MODERN.BK","MONO.BK","MOONG.BK","MORE.BK","MPG.BK","MPIC.BK","MSC.BK","MTC.BK","MTI.BK","MVP.BK",
+           "NBC.BK","NC.BK","NCAP.BK","NCH.BK","NCL.BK","NDR.BK","NEP.BK","NER.BK","NETBAY.BK","NEW.BK","NEWS.BK","NEX.BK","NFC.BK","NINE.BK",
+           "NKI.BK","NMG.BK","NNCL.BK","NOBLE.BK","NOK.BK","NOVA.BK","NPK.BK","NRF.BK","NSI.BK","NTV.BK","NUSA.BK","NVD.BK","NWR.BK","NYT.BK",
+           "OCC.BK","OCEAN.BK","OGC.BK","OHTL.BK","OISHI.BK","OR.BK","ORI.BK","OSP.BK","OTO.BK","PACE.BK","PACO.BK","PAF.BK","PAP.BK","PATO.BK","PB.BK","PCSGH.BK","PDG.BK","PDI.BK","PDJ.BK","PE.BK","PERM.BK","PF.BK","PG.BK","PHOL.BK","PICO.BK","PIMO.BK","PJW.BK",
+           "PK.BK","PL.BK","PLANB.BK","PLANET.BK","PLAT.BK","PLE.BK","PM.BK","PMTA.BK","POLAR.BK","PORT.BK","POST.BK","PPM.BK","PPP.BK","PPPM.BK",
+           "PPS.BK","PR9.BK","PRAKIT.BK","PRAPAT.BK","PREB.BK","PRECHA.BK","PRG.BK","PRIME.BK","PRIN.BK","PRINC.BK","PRM.BK",
+           "PROUD.BK","PSH.BK","PSL.BK","PSTC.BK","PT.BK","PTG.BK","PTL.BK","PTT.BK","PTTEP.BK","PTTGC.BK","PYLON.BK","Q-CON.BK","QH.BK","QLT.BK","QTC.BK",
+           "RAM.BK","RATCH.BK","RBF.BK","RCI.BK","RCL.BK","RICHY.BK","RJH.BK","RML.BK","ROCK.BK","ROH.BK","ROJNA.BK","RP.BK","RPC.BK","RPH.BK",
+           "RS.BK","RSP.BK","RT.BK","RWI.BK","S.BK","S11.BK","SA.BK","SAAM.BK","SABINA.BK","SABUY.BK","SAK.BK","SALEE.BK","SAM.BK",
+           "SAMART.BK","SAMCO.BK","SAMTEL.BK","SANKO.BK","SAPPE.BK","SAT.BK","SAUCE.BK","SAWAD.BK","SAWANG.BK","SC.BK","SCB.BK","SCC.BK","SCCC.BK",
+           "SCG.BK","SCGP.BK","SCI.BK","SCM.BK","SCN.BK","SCP.BK","SDC.BK","SE.BK","SE-ED.BK","SEAFCO.BK","SEAOIL.BK","SELIC.BK","SENA.BK","SF.BK",
+           "SFLEX.BK","SFP.BK","SFT.BK","SGF.BK","SGP.BK","SHANG.BK","SHR.BK","SIAM.BK","SICT.BK","SIMAT.BK","SINGER.BK","SIRI.BK","SIS.BK",
+           "SISB.BK","SITHAI.BK","SK.BK","SKE.BK","SKN.BK","SKR.BK","SKY.BK","SLM.BK","SLP.BK","SMART.BK","SMIT.BK","SMK.BK","SMPC.BK","SMT.BK",
+           "SNC.BK","SNP.BK","SO.BK","SOLAR.BK","SONIC.BK","SORKON.BK","SPA.BK","SPACK.BK","SPALI.BK","SPC.BK","SPCG.BK","SPG.BK","SPI.BK",
+           "SPRC.BK","SPVI.BK","SQ.BK","SR.BK","SRICHA.BK","SSC.BK","SSF.BK","SSP.BK","SSSC.BK","SST.BK","STA.BK","STANLY.BK","STAR.BK","STARK.BK",
+           "STC.BK","STEC.BK","STGT.BK","STHAI.BK","STI.BK","STPI.BK","SUC.BK","SUN.BK","SUPER.BK","SUSCO.BK","SUTHA.BK","SVH.BK","SVI.BK",
+           "SVOA.BK","SWC.BK","SYMC.BK","SYNEX.BK","SYNTEC.BK","T.BK","TACC.BK","TAE.BK","TAKUNI.BK","TAPAC.BK","TASCO.BK","TBSP.BK","TC.BK",
+           "TCAP.BK","TCC.BK","TCCC.BK","TCJ.BK","TCMC.BK","TCOAT.BK","TEAM.BK","TEAMG.BK","TFG.BK","TFI.BK","TFMAMA.BK","TGH.BK","TGPRO.BK",
+           "TH.BK","THAI.BK","THANA.BK","THANI.BK","THCOM.BK","THE.BK","THG.BK","THIP.BK","THMUI.BK","THRE.BK","THREL.BK","TIGER.BK",
+           "TIP.BK","TIPCO.BK","TISCO.BK","TITLE.BK","TK.BK","TKN.BK","TKS.BK","TKT.BK","TM.BK","TMB.BK","TMC.BK","TMD.BK","TMI.BK","TMILL.BK",
+           "TMT.BK","TMW.BK","TNDT.BK","TNH.BK","TNITY.BK","TNL.BK","TNP.BK","TNPC.BK","TNR.BK","TOA.BK","TOG.BK","TOP.BK","TOPP.BK","TPA.BK",
+           "TPAC.BK","TPBI.BK","TPCH.BK","TPCORP.BK","TPIPL.BK","TPIPP.BK","TPLAS.BK","TPOLY.BK","TPP.BK","TPS.BK","TQM.BK","TQR.BK","TR.BK",
+           "TRC.BK","TRITN.BK","TRT.BK","TRU.BK","TRUBB.BK","TRUE.BK","TSC.BK","TSE.BK","TSI.BK","TSR.BK","TSTE.BK","TSTH.BK","TTA.BK",
+           "TTCL.BK","TTI.BK","TTT.BK","TTW.BK","TU.BK","TVD.BK","TVI.BK","TVO.BK","TVT.BK","TWP.BK","TWPC.BK","TWZ.BK","TYCN.BK","U.BK","UAC.BK",
+           "UBIS.BK","UEC.BK","UKEM.BK","UMI.BK","UMS.BK","UNIQ.BK","UOBKH.BK","UP.BK","UPA.BK","UPF.BK","UPOIC.BK","UREKA.BK","UT.BK","UTP.BK",
+           "UV.BK","UVAN.BK","UWC.BK","VARO.BK","VCOM.BK","VGI.BK","VIBHA.BK","VIH.BK","VL.BK","VNG.BK","VNT.BK","VPO.BK","VRANDA.BK","W.BK",
+           "WACOAL.BK","WAVE.BK","WGE.BK","WHA.BK","WHAUP.BK","WICE.BK","WIIK.BK","WIN.BK","WINNER.BK","WORK.BK","WP.BK","WPH.BK","WR.BK","XO.BK",
+           "YCI.BK","YGG.BK","YUASA.BK","ZEN.BK","ZIGA.BK","ZMICO.BK"]
+for ticker in company:
+    period1 = int(time.mktime(datetime.datetime(2000, 1, 1, 23, 59).timetuple()))
+    period2 = int(time.mktime(datetime.datetime.now().timetuple()))
+    interval = '1d'
+
+    query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+    location = f'C:/Users/BNash/Desktop/BNASH/Investment/Stock Analysis/Database/raw/{ticker}.csv'
+    df = pd.read_csv(query_string)
+    print(df)
+    df.to_csv(location)
